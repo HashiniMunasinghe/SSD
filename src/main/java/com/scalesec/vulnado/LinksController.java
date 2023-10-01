@@ -7,6 +7,8 @@ import org.springframework.boot.autoconfigure.*;
 import org.springframework.web.util.UriUtils;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -43,10 +45,16 @@ public class LinksController {
     }
 
     private boolean isValidUrl(String url) {
-        // Implement URL validation logic (whitelist or regex validation)
-        // Only allow requests to trusted and intended domains
-        // Return true if the URL is valid, false otherwise
-        // For simplicity, this example always returns true; implement your own logic.
-        return true;
+        try {
+            // Parse the URL and check the scheme
+            URI uri = new URI(url);
+            String scheme = uri.getScheme();
+
+            // Allow only http and https schemes
+            return "http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme);
+        } catch (URISyntaxException e) {
+            // Handle invalid URL format
+            return false;
+        }
     }
 }
