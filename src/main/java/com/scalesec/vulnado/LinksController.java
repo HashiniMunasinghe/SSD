@@ -14,6 +14,9 @@ import java.util.List;
 @RestController
 @EnableAutoConfiguration
 public class LinksController {
+    // Define a list of allowed domains
+    private static final List<String> ALLOWED_DOMAINS = List.of("example.com", "trusteddomain.com");
+
     @RequestMapping(value = "/links", produces = "application/json")
     public List<String> links(@RequestParam String url) throws IOException {
         String decodedUrl = decodeAndValidateUrl(url);
@@ -51,8 +54,9 @@ public class LinksController {
 
             // Allow only http and https schemes
             if ("http".equalsIgnoreCase(scheme) || "https".equalsIgnoreCase(scheme)) {
-                // Implement additional checks if needed, such as white-listing certain domains
-                return true;
+                // Check if the host (domain) is in the allowed list
+                String host = uri.getHost();
+                return host != null && ALLOWED_DOMAINS.contains(host.toLowerCase());
             }
 
             return false;
