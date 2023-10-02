@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.*;
 @RestController
 @EnableAutoConfiguration
 public class CowController {
-    @RequestMapping(value = "/cowsay")
+    @RequestMapping(value = "/cowsay", method = RequestMethod.GET)
     String cowsay(@RequestParam(defaultValue = "I love Linux!") String input) {
         // Sanitize user input to prevent XSS
         String sanitizedInput = sanitizeInput(input);
